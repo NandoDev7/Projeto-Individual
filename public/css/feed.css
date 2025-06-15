@@ -1,0 +1,266 @@
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap');
+
+* {
+  font-family: 'Oswald', sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+body {
+  background-color: #E6C3A1;
+}
+
+.janela {
+  display: flex;
+  height: 100vh;
+}
+
+.header-left {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 999;
+  height: 100vh;
+  width: 20%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+  border-right: 2px solid #3a3a3a;
+  background-color: #23252B;
+}
+
+.header-left a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.header-left h1 {
+  color: #ffffff;
+  font-size: 24px;
+}
+
+.hello h3 {
+  color: #cccccc;
+  font-size: 1.1rem;
+}
+
+.hello h3 span {
+  color: #ffffff;
+  font-weight: 700;
+}
+
+img {
+  width: 25px;
+  height: auto;
+  margin-block-start: 8px;
+}
+
+.btn-nav {
+  width: 70%;
+  background-color: #962828b2;
+  border-radius: 50px;
+  text-align: center;
+  padding: 10px 0;
+  color: white;
+  transition: 0.3s;
+}
+
+.btn-nav:hover {
+  background-color: #E6C3A1;
+  color: black;
+  transition: 0.3s;
+}
+
+.btn-nav-white {
+  width: 70%;
+  background-color: #E6C3A1;
+  color: #000;
+  border-radius: 50px;
+  text-align: center;
+  padding: 10px 0;
+  font-weight: bold;
+  transition: background-color 0.2s;
+}
+
+.btn-nav-white:hover {
+  background-color: #962828b2;
+  color: #d2d2d2;
+}
+
+.btn-logout {
+  width: 50%;
+  background-color: #E6C3A1;
+  color: black;
+  border-radius: 50px;
+  text-align: center;
+  padding: 10px;
+  cursor: pointer;
+  font-weight: bold;
+  margin-bottom: 40px;
+  transition: 0.3s;
+}
+
+.btn-logout:hover {
+  transition: 0.3s;
+  background-color: #962828b2;
+  color: white;
+}
+
+/* FIM HEADER */
+
+.dash-right {
+  width: 80%;
+  margin-left: 20%;
+  padding: 30px;
+  overflow-y: auto;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.container h1 {
+  margin-bottom: 20px;
+  color: #000;
+  text-align: center;
+}
+
+.div-form {
+  background-color: #23252B;
+  padding: 25px;
+  border-radius: 25px;
+  width: 70%;
+  margin-bottom: 40px;
+  box-shadow: 10px 12px 15px rgba(0, 0, 0, 0.5);
+  border: 3px solid #962828b2;
+}
+
+.div-form label {
+  display: flex;
+  font-size: 16px;
+  color: #d2d2d2;
+  flex-direction: column;
+}
+
+input {
+  width: 100%;
+  padding: 10px 0;
+  background-color: transparent;
+  color: #d2d2d2;
+  margin-top: 5px;
+  outline: none;
+  border: none;
+  border-bottom: 2px solid #E6C3A1;
+  transition: border-color 0.3s ease;
+}
+
+input:focus {
+  border-bottom-color: #962828b2;
+  /* Muda a cor da linha inferior ao focar */
+}
+
+
+button {
+  padding: 10px 30px;
+  background-color: #E6C3A1;
+  border: none;
+  border-radius: 50px;
+  color: black;
+  font-weight: bold;
+  margin-top: 5px;
+  transition: 0.3s;
+  cursor: pointer;
+  outline: none;
+  /* Remove o outline padrão do navegador */
+}
+
+button:hover {
+  background-color: #962828b2;
+  color: white;
+  transition: 0.3s;
+}
+
+button:focus,
+button:active {
+  outline: none;
+  /* Remove o outline no foco e ao clicar */
+  box-shadow: none;
+  /* Remove qualquer sombra de foco que o navegador adicione */
+}
+
+.div-results {
+  width: 100%;
+  max-width: 800px;
+}
+
+.feed-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.publicacao {
+  background-color: #23252B;
+  padding: 20px;
+  border-radius: 25px;
+  box-shadow: 5px 7px 9px rgba(0, 0, 0, 0.5);
+  width: 100%;
+  align-self: center;
+  border: 3px solid #962828b2;
+}
+
+.publicacao-motivo {
+  font-size: 14px;
+  color: #cccccc;
+  margin-bottom: 10px;
+}
+
+.publicacao span,
+.publicacao div {
+  display: block;
+  margin-bottom: 10px;
+  font-size: 14px;
+  color: #dddddd;
+}
+
+.publicacao b {
+  color: #ffffff;
+}
+
+/* Estilo padrão dos botões de publicação */
+.publicacao-btn {
+  padding: 10px 20px;
+  border-radius: 50px;
+  background-color: #3a7bd5;
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s;
+  font-size: 14px;
+  margin: 5px;
+}
+
+.publicacao-btn:hover {
+  background-color: #326ac0;
+}
+
+/* Estilo específico para botão de deletar */
+.publicacao-btn.deletar {
+  background-color: #d9534f;
+}
+
+.publicacao-btn.deletar:hover {
+  background-color: #c9302c;
+}
+
+.div-buttons {
+  display: flex;
+  gap: 12px;
+  margin-top: 15px;
+}

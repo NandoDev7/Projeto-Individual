@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>M'C | Cadastro</title>
+
+  <script src="./js/sessao.js"></script>
+
+  <link rel="stylesheet" href="./css/cadastro.css" />
+  <link rel="icon" href="./assets/icon/favicon2.svg" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oswald&display=swap" />
+</head>
+
+<body>
+  <header>
+    <a class="logo">Maia's Cuisine <img src="./assets/icon/favicon2.svg" /></a>
+
+    <div class="navigation">
+      <ul class="menu">
+        <li class="menu-item"><a href="./index.html">Home</a></li>
+        <li class="barra">|</li>
+        <li class="menu-item"><a href="./sobre.html">Sobre mim</a></li>
+        <li class="barra">|</li>
+        <li class="menu-item">
+          <a class="sub-btn" href="index.html?scroll=footer" id="scrollContato">Contato</a>
+        </li>
+        <li class="barra">|</li>
+        <li class="menu-item">
+          <a class="sub-btn" href="./login.html">Login </a>
+        </li>
+      </ul>
+    </div>
+  </header>
+
+  <div class="login">
+    <div class="alerta_erro">
+      <div class="card_erro" id="cardErro" style="display: none;">
+        <span id="mensagem_erro"></span>
+      </div>
+    </div>
+    <div class="container">
+      <div class="card card-login">
+        <a href="login.html"><img src="./assets/imgs/setaVoltar.svg" /></a>
+        <h2>Crie sua conta</h2>
+        <div class="formulario">
+          <div class="campo">
+            <span>Nome completo:</span>
+            <input id="nome_input" type="text" placeholder="Digite seu nome completo" />
+          </div>
+          <div class="campo">
+            <span>E-mail:</span>
+            <input id="email_input" type="text" placeholder="Digite seu e-mail" />
+          </div>
+          <div class="campo">
+            <span>Senha:</span>
+            <input id="senha_input" type="password" placeholder="Digite sua senha" />
+          </div>
+          <div class="campo">
+            <span>Confirmação de senha:</span>
+            <input id="confirmacao_senha_input" type="password" placeholder="Repita sua senha" />
+          </div>
+          <button class="botao" onclick="cadastrar()">Cadastrar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function cadastrar() {
+      var nome = document.getElementById("nome_input").value.trim();
+      var email = document.getElementById("email_input").value.trim();
+      var senha = document.getElementById("senha_input").value;
+      var confirmacaoSenha = document.getElementById("confirmacao_senha_input").value;
+
+      var erro = document.getElementById("cardErro");
+      var mensagem = document.getElementById("mensagem_erro");
+      erro.style.display = "none";
+      mensagem.innerHTML = "";
+
+      if (!nome || !email || !senha || !confirmacaoSenha) {
+        erro.style.display = "block";
+        mensagem.innerHTML = "Preencha todos os campos para prosseguir";
+        return;
+      }
+
+      if (!email.includes("@") || !email.includes(".")) {
+        erro.style.display = "block";
+        mensagem.innerHTML = "Digite um e-mail válido contendo '@' e '.'";
+        return;
+      }
+      var temMaiuscula = false;
+      var temNumero = false;
+      var temEspecial = false;
+      var especiais = "!.@#$%^&*()_+-=[]{}/?<>";
+
+      for (var i = 0; i < senha.length; i++) {
+        var char = senha[i];
+
+        if (char === char.toUpperCase() && char !== char.toLowerCase()) {
+          temMaiuscula = true;
+        }
+
+        if ("0123456789".includes(char)) {
+          temNumero = true;
+        }
+
+        if (especiais.includes(char)) {
+          temEspecial = true;
+        }
+      }
+
+      if (!temMaiuscula || !temNumero || !temEspecial) {
+        erro.style.display = "block";
+        mensagem.innerHTML = "A senha deve conter pelo menos uma letra maiúscula, um número e um caractere especial.";
+        return;
+      }
+
+      if (senha !== confirmacaoSenha) {
+        erro.style.display = "block";
+        mensagem.innerHTML = "As senhas não correspondem.";
+        return;
+      }
+      
+      fetch("/usuarios/cadastrar", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          nomeServer: nome,
+          emailServer: email,
+          senhaServer: senha,
+        }),
+      })
+        .then(function (resposta) {
+          if (resposta.ok) {
+            erro.style.display = "block";
+            mensagem.innerHTML = "Cadastro realizado com sucesso! Redirecionando...";
+            setTimeout(() => {
+              window.location.href = "login.html";
+            }, 2000);
+          } else {
+            throw new Error("Erro ao cadastrar.");
+          }
+        })
+        .catch(function (erroBack) {
+          erro.style.display = "block";
+          mensagem.innerHTML = "Ocorreu um erro no cadastro. Tente novamente";
+          console.error(erroBack);
+        });
+    }
+  </script>
+</body>
+
+</html>

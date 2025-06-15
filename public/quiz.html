@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>M'C | Quiz</title>
+    <link rel="stylesheet" href="./css/quiz.css">
+    <link rel="icon" href="./assets/icon/favicon2.svg">
+    <script src="./js/sessao.js"></script>
+</head>
+
+
+<body onload="validarSessao()">
+
+    <div class="header-left">
+
+        <h1>Maias' Cuisine <img src="./assets/icon/favicon2.svg"></h1>
+
+        <div class="hello">
+            <h3>Bem-vindo de volta, <span id="b_usuario">usuário</span>!</h3>
+        </div>
+
+        <div class="btn-nav">
+
+            <h3>Quiz</h3>
+
+        </div>
+
+        <div class="btn-nav-white">
+            <a href="./dashboard.html">
+                <h3>Painel de dados</h3>
+            </a>
+        </div>
+
+        <div class="btn-nav-white">
+            <a href="feed.html">
+                <h3>Feed</h3>
+            </a>
+        </div>
+
+        <div class="btn-logout" onclick="limparSessao()">
+            <h3>Sair</h3>
+        </div>
+
+    </div>
+
+    <div class="qt-app">
+        <h1>QUIZ - COMIDAS BRASILEIRAS</h1>
+        <div class="qt-quiz">
+            <h2 id="qt-question">Enunciado</h2>
+            <div id="qt-answer-buttons">
+                <button class="qt-btn">quest 1</button>
+                <button class="qt-btn">quest 2</button>
+                <button class="qt-btn">quest 3</button>
+                <button class="qt-btn">quest 4</button>
+            </div>
+            <button id="qt-next-btn">Next Quest</button>
+
+            <button id="qt-logout-btn" class="qt-btn" style="display: none;" onclick="sairQuiz()">Sair</button>
+        </div>
+    </div>
+
+</body>
+
+</html>
+<script>
+
+    b_usuario.innerHTML = sessionStorage.NOME_USUARIO;
+    var idUsuario = Number(sessionStorage.ID_USUARIO);
+
+    //ARRAY COM AS PERGUNTAS E RESPOSTAS DO QUIZ
+    const questions = [
+        {
+            question: "O “bolo de rolo” é típico de qual estado brasileiro?",
+            answers: [
+                { id: 3, text: "Piauí", correct: false },
+                { id: 4, text: "Paraná", correct: false },
+                { id: 1, text: "Paraíba", correct: false },
+                { id: 2, text: "Pernambuco", correct: true }
+            ]
+        },
+        {
+            question: "Qual doce é feito com leite condensado, chocolate e granulado?",
+            answers: [
+                { id: 2, text: "Beijinho", correct: false },
+                { id: 3, text: "Brigadeiro", correct: true },
+                { id: 4, text: "Quindim", correct: false },
+                { id: 1, text: "Pé-de-moleque", correct: false }
+            ]
+        },
+        {
+            question: "Qual prato típico é feito com carne de sol, macaxeira e queijo coalho?",
+            answers: [
+                { id: 1, text: "Baião de dois", correct: true },
+                { id: 2, text: "Galinhada", correct: false },
+                { id: 3, text: "Arroz carreteiro", correct: false },
+                { id: 4, text: "Vaca atolada", correct: false }
+            ]
+        },
+        {
+            question: "O que é 'moqueca'?",
+            answers: [
+                { id: 2, text: "Doce de leite", correct: false },
+                { id: 3, text: "Churrasco de porco", correct: false },
+                { id: 1, text: "Ensopado de peixe", correct: true },
+                { id: 4, text: "Sopa de mandioca", correct: false }
+            ]
+        },
+        {
+            question: "Qual prato típico leva arroz, pequi e frango?",
+            answers: [
+                { id: 1, text: "Arroz carreteiro", correct: false },
+                { id: 2, text: "Galinhada", correct: true },
+                { id: 3, text: "Baião de dois", correct: false },
+                { id: 4, text: "Vaca atolada", correct: false }
+            ]
+        },
+        {
+            question: "Qual desses pratos exige que as folhas sejam cozidas por 7 dias para eliminar toxinas?",
+            answers: [
+                { id: 4, text: "Tacacá", correct: false },
+                { id: 3, text: "Vatapá", correct: false },
+                { id: 1, text: "Maniçoba", correct: true },
+                { id: 2, text: "Feijoada", correct: false }
+            ]
+        },
+        {
+            question: "O que é o 'pinhão', muito consumido na região Sul?",
+            answers: [
+                { id: 3, text: "Folha de chá", correct: false },
+                { id: 4, text: "Raiz comestível", correct: false },
+                { id: 2, text: "Semente da araucária", correct: true },
+                { id: 1, text: "Fruta do cerrado", correct: false }
+            ]
+        },
+        {
+            question: "Qual estado é conhecido pelo uso do tucupi e jambu na culinária?",
+            answers: [
+                { id: 4, text: "Rio Grande do Sul", correct: false },
+                { id: 1, text: "Bahia", correct: false },
+                { id: 3, text: "Minas Gerais", correct: false },
+                { id: 2, text: "Pará", correct: true }
+            ]
+        },
+        {
+            question: "A maniçoba é um prato típico de qual região?",
+            answers: [
+                { id: 4, text: "Sudeste", correct: false },
+                { id: 1, text: "Sul", correct: false },
+                { id: 3, text: "Norte", correct: true },
+                { id: 2, text: "Centro-Oeste", correct: false }
+            ]
+        },
+        {
+            question: "Qual é o prato típico brasileiro feito com feijão-preto e várias carnes?",
+            answers: [
+                { id: 4, text: "Sarapatel", correct: false },
+                { id: 2, text: "Dobradinha", correct: false },
+                { id: 1, text: "Feijoada", correct: true },
+                { id: 3, text: "Moqueca", correct: false }
+            ]
+        }
+    ];
+
+    // ELEMENTOS DA INTEFACE DO QUIZ (ENÚNCIADO, ALTERNATIVAS E PRÓXIMA QUESTÃO)
+    const questionElement = document.getElementById("qt-question");
+    const answerButtons = document.getElementById("qt-answer-buttons");
+    const nextButton = document.getElementById("qt-next-btn");
+
+    let currentQuestionIndex = 0; //PERGUNTA ATUAL
+    let score = 0; // PONTUAÇÃO DO JOGADOR
+
+    // FUNÇÃO QUE INICIA O QUIZ
+    function startQuiz() {
+        currentQuestionIndex = 0; // PRIMEIRA PERGUNTA
+        score = 0; // PONTUAÇÃO COMEÇA NO 0
+        nextButton.innerHTML = "Próxima";
+        showQuestion(); // FUNÇAO QUE EXIBE A QUESTÃO
+    }
+
+    // FUNÇÃO QUE LIMPA A TELA ANTES DE MOSTRAR A PRÓXIMA QUESTÃO
+    function resetState() {
+        nextButton.style.display = "none";
+        while (answerButtons.firstChild) {
+            answerButtons.removeChild(answerButtons.firstChild);
+        }
+    }
+
+    // FUNÇÃO QUE MOSTRA A QUESTÃO ATUAL E MOSTRA OS BOTÕES AUTOMATICAMENTE
+    function showQuestion() {
+        resetState(); // LIMPA ANTES DE EXIBIR A PRÓXIMA
+        let currentQuestion = questions[currentQuestionIndex]; // PEGA A QUESTÃO ATUAL
+        let questionNo = currentQuestionIndex + 1;
+        questionElement.innerHTML = questionNo + ". " + currentQuestion.question; // EXIBE ENUNCIADO
+
+        // CRIA UM BOTÃO PARA CADA RESPOSTA
+        for (let i = 0; i < currentQuestion.answers.length; i++) {
+            let answer = currentQuestion.answers[i];
+
+            const button = document.createElement("button");
+            button.innerHTML = answer.text;
+            button.dataset.id = answer.id;
+            button.classList.add("qt-btn");
+            button.addEventListener("click", selectAnswer);
+            answerButtons.appendChild(button);
+        }
+
+    }
+
+    // VERIFICA SE A QUESTÃO ESTÁ CORRETA OU INCORRETA
+    function selectAnswer(e) {
+        answers = questions[currentQuestionIndex].answers;
+        const correctAnswer = answers.filter((answer) => answer.correct == true)[0]; // FILTRA A RESPOSTA CORRETA
+        const selectBtn = e.target; // BOTÃO CLICADO
+        const isCorrect = selectBtn.dataset.id == correctAnswer.id;
+        if (isCorrect) {
+            selectBtn.classList.add("correct"); // ADICIONA CLASSE DE CORRETO (CSS)
+            score++; // AUMENTA PONTUAÇÃO
+        } else {
+            selectBtn.classList.add("incorrect"); // ADICIONA CLASSE DE INCORRETO (CSS)
+        }
+        Array.from(answerButtons.children).forEach((button) => { // DESATIVA TODOS OS BOTÕES APÓS CLICAR NA RESPOSTA
+            button.disabled = true;
+        });
+        nextButton.style.display = "block"; // APÓS CLICAR NA RESPOSTA, O BOTÃO DE "PRÓXIMA QUESTÃO" APARECE
+    }
+
+    // FUNÇÃO QUE EXIBE O RESULTADO DO QUIZ APÓS FINAL
+    function showScore() {
+        resetState();
+        questionElement.innerHTML = `Você acertou ${score} de ${questions.length} perguntas!`
+        nextButton.innerHTML = "Tentar novamente"; // ALTERA O BOTÃO PARA REINICIAR O JOGO
+        nextButton.style.display = "block"; // MOSTRA O BOTÃO
+
+        document.getElementById("qt-logout-btn").style.display = "block"; // MOSTRA O BOTÃO SAIR
+        salvarPontuacao();
+    }
+
+    function salvarPontuacao() {
+        fetch("/quiz/registrarPontuacao", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                pontuacao: score,
+                idUsuario: idUsuario
+            })
+        })
+            .then(res => {
+                if (!res.ok) throw new Error("Erro ao registrar pontuação");
+                return res.json();
+            })
+            .then(data => {
+                console.log(data.mensagem);
+            })
+            .catch(erro => console.error(erro));
+    }
+
+
+    // FUNÇÃO CHAMADA APÓS FINALIZAR O QUIZ
+    function sairQuiz() {
+
+        window.location.href = './dashboard.html';
+    }
+
+    // FUNÇÃO QUE CONTROLE SE HÁ OU NÃO QUESTÕES. CASO TIVER, VAI PASSANDO PARA AS PRÓXIMAS PERGUNTAS, CASO CONTRÁRIO, FINALIZAR QUIZ E MOSTRAR RESULTADO DO QUIZ
+    function handleNextButton() {
+        currentQuestionIndex++;
+        if (currentQuestionIndex < questions.length) {
+            showQuestion();
+        } else {
+            showScore();
+        }
+    }
+
+    // EVENTO DE CLICK DO BOTÃO 'PRÓXIMA', CASO NÃO HOUVER PRÓXIMAS, ELE REINICIA 
+    nextButton.addEventListener("click", () => {
+        if (currentQuestionIndex < questions.length) {
+            handleNextButton();
+        } else {
+            startQuiz();
+        }
+    });
+
+    // INICIA O QUIZ ASSIM QUE A PÁGINA CARREGAR
+    startQuiz();
+
+</script>

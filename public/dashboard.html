@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <link rel="shortcut icon" href="../assets/icon/favicon2.ico" type="image/x-icon">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>M'C | Dashboard</title>
+
+    <link rel="stylesheet" href="./css/dashboards.css">
+    <link rel="icon" href="./assets/icon/favicon2.svg">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="../js/sessao.js"></script>
+
+</head>
+
+<body onload="validarSessao()">
+
+    <div class="janela">
+        <div class="header-left">
+            <h1>Maias' Cuisine <img src="./assets/icon/favicon2.svg"></h1>
+
+            <div class="hello">
+                <h3>Bem-vindo de volta, <span id="b_usuario">undefined</span>!</h3>
+            </div>
+
+            <div class="btn-nav-white">
+                <a href="quiz.html">
+                    <h3>Quiz</h3>
+                </a>
+            </div>
+
+            <div class="btn-nav">
+                <h3>Painel de Dados</h3>
+            </div>
+
+            <div class="btn-nav-white">
+                <a href="feed.html">
+                    <h3>Feed</h3>
+                </a>
+            </div>
+
+            <div class="btn-logout" onclick="limparSessao()">
+                <h3>Sair</h3>
+            </div>
+
+        </div>
+
+        <div class="container-graficos">
+            <div class="top-row">
+                <div class="chart-container">
+                    <h2>QUANTIDADE DE POSTAGENS POR HORA:</h2>
+                    <canvas id="myChart"></canvas>
+                </div>
+                <div class="chart-container">
+                    <h2>QUANTIDADE DE POSTAGENS POR USUÁRIO:</h2>
+                    <canvas id="myChart2"></canvas>
+                </div>
+            </div>
+            <div class="bottom-row">
+                <div class="chart-container">
+                    <h2>QUANTIDADE DE POSTAGENS QUE VOCÊ POSSUI:</h2>
+                    <p id="qtdPostagem"></p>
+                </div>
+                <div class="chart-container ">
+                    <h2>APROVEITAMENTO DO ÚLTIMO QUIZ FEITO:</h2>
+                    <p id="aproveitamento"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        b_usuario.innerHTML = sessionStorage.NOME_USUARIO;
+        var idUsuario = Number(sessionStorage.ID_USUARIO);
+
+        fetch("/dashboard/receitasPorHora")
+            .then(res => res.json())
+            .then(dados => {
+                const horas = dados.map(item => item.hora + "h");
+                const totais = dados.map(item => item.total);
+
+                const ctx1 = document.getElementById('myChart');
+                new Chart(ctx1, {
+                    type: 'line',
+                    data: {
+                        labels: horas,
+                        datasets: [{
+                            label: 'Receitas postadas por hora',
+                            data: totais,
+                            borderColor: '#E6C3A1',
+                            backgroundColor: '#962828b2',
+                            borderWidth: 1,
+                            tension: 0.3,
+                            fill: true
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    stepSize: 1
+                                },
+                                title: { display: true, text: 'Quantidade de receitas postadas' }
+                            },
+                            x: {
+                                title: { display: true, text: 'Horas do dia' }
+                            }
+                        }
+                    }
+
+                });
+            });
+
+       
+        fetch("/dashboard/quantidadePorUsuarios")
+            .then(res => res.json())
+            .then(dados => {
+                const nomes = dados.map(item => item.nome);
+                const postagens = dados.map(item => item.total);
+
+                const ctx2 = document.getElementById('myChart2');
+                new Chart(ctx2, {
+                    type: 'bar',
+                    data: {
+                        labels: nomes,
+                        datasets: [{
+                            label: 'Quantidade de Postagens',
+                            data: postagens,
+                            borderWidth: 2,
+                            borderColor: '#962828b2',
+                            backgroundColor: '#E6C3A1'
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    stepSize: 1
+                                },
+                                title: { display: true, text: 'Postagens' }
+                            },
+                            x: {
+                                title: { display: true, text: 'Usuários' }
+                            }
+                        }
+                    }
+
+                });
+            });
+
+            fetch(`/dashboard/qtdPostagensPorUsuario/${idUsuario}`, {
+                method: "GET",
+            }).then(res => res.json())
+              .then(function (resposta){
+                var postagem = document.getElementById('qtdPostagem');
+                postagem.innerHTML = `${resposta[0].quantidadeDePostagem}`
+
+              })
+              
+              fetch(`/dashboard/aproveitamentoPorUsuario/${idUsuario}`, {
+                  method: "GET",
+              }).then(res => res.json())
+                .then(function (resposta){
+                  var aproveitamento = document.getElementById('aproveitamento');
+                  var pontuacao = resposta[0].aproveitamento;
+                  var porcentagem = Math.round((pontuacao / 10) * 100);
+                  aproveitamento.innerHTML = `${porcentagem}%`
+                })
+                
+                .catch(function (resposta) {
+                    console.log(`#ERRO: ${resposta}`);
+                });
+
+            
+    </script>
+
+
+</body>
+
+</html>

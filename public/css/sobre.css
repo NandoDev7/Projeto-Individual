@@ -1,0 +1,177 @@
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Oswald', sans-serif;
+}
+
+body {
+    background-color: #23252B;
+}
+
+/*NAVBAR*/
+header {
+    z-index: 999;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #23252b9d;
+    background-size: cover;
+    background-size: 100%;
+    box-shadow: 0 5px 25px rgb(0 0 0 / 20%);
+    padding: 0 100px;
+    transition: 0.6s;
+}
+
+header .logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #fff;
+    font-size: 4vh;
+    outline: none;
+    margin-left: -75px;
+    text-decoration: none;
+    font-weight: 800;
+}
+
+header .logo img {
+    width: 25px;
+    height: auto;
+    margin-block-start: 8px;
+}
+
+header .navigation {
+    position: relative;
+    line-height: 75px;
+    transition: 0.6s;
+    transition-property: line-height;
+}
+
+header .navigation .menu {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    list-style: none;
+    user-select: none;
+}
+
+.menu-item a {
+    color: #E6C3A1;
+    text-decoration: none;
+    margin: 20px;
+    padding: 0;
+    transition: 0.3s;
+    font-size: 18px;
+
+}
+
+.menu-item>a:hover {
+    color: #962828cc;
+    transition: 0.3s;
+}
+
+.barra {
+    color: #fff;
+}
+
+/*FIM NAVBAR*/
+
+.photo {
+    background-color: #3d2828;
+    color: #e6c3a1;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px #962828cc;
+    height: 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-weight: 600;
+    font-size: 1rem;
+    padding: 10px;
+    text-align: center;
+    user-select: none;
+    cursor: default;
+    transition: transform 0.3s ease;
+}
+
+/* MAIN CONTENT */
+main {
+    width: 85%;
+    margin: 120px auto 60px auto;
+    /* margin-top for fixed header */
+    padding: 0 20px;
+}
+
+/* Profile section */
+.profile {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.profile-photo {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    margin: 0 auto 20px auto;
+    background: url('../assets/imgs/1747492660053.webp') center/cover no-repeat;
+    box-shadow: 0 0 15px 4px #962828cc;
+    border: 4px solid #962828cc;
+}
+
+.profile h1 {
+    font-size: 2.8rem;
+    color: #fff;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.profile p {
+    color: #e6c3a1;
+    font-size: 20px;
+    font-weight: 400;
+}
+
+/* Sections style */
+section {
+    margin-bottom: 50px;
+}
+
+section a {
+    font-size: 40px;
+    text-decoration: underline;
+    text-decoration-color: white;
+}
+
+section h2 {
+    font-size: 50px;
+    color: #962828cc;
+    border-bottom: 3px solid #962828cc;
+    padding-bottom: 6px;
+    margin-bottom: 20px;
+    font-weight: 700;
+}
+
+section p {
+    font-size: 20px;
+    color: #E6C3A1;
+    font-weight: 900;
+    white-space: pre-line;
+}
+
+.inspiration a{
+    color: #E6C3A1;
+    transition: 0.3s;
+}
+
+.inspiration a:hover {
+    color: #962828cc;
+    transition: 0.3s;
+}

@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <link rel="shortcut icon" href="../assets/icon/favicon2.ico" type="image/x-icon">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>M'C | Feed</title>
+
+    <link rel="stylesheet" href="./css/feed.css" />
+    <link rel="icon" href="./assets/icon/favicon2.svg">
+    <script src="./js/sessao.js"></script>
+
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+</head>
+
+<body onload="validarSessao(), atualizarFeed()">
+
+    <div class="janela">
+
+
+        <div class="header-left">
+
+            <h1>Maias' Cuisine <img src="./assets/icon/favicon2.svg"></h1>
+
+            <div class="hello">
+                <h3>Bem-vindo de volta, <span id="b_usuario">usuário</span>!</h3>
+            </div>
+
+            <div class="btn-nav-white">
+                <a href="quiz.html">
+                    <h3>Quiz</h3>
+                </a>
+            </div>
+
+            <div class="btn-nav-white">
+                <a href="./dashboard.html">
+                    <h3>Painel de dados</h3>
+                </a>
+            </div>
+
+            <div class="btn-nav">
+                <h3>Feed</h3>
+            </div>
+
+            <div class="btn-logout" onclick="limparSessao()">
+                <h3>Sair</h3>
+            </div>
+
+        </div>
+
+        <div class="dash-right">
+
+
+            <div class="avisos">
+                <div id="alerta">
+                </div>
+                <div class="container">
+                    <h1>Publicar uma receita</h1>
+                    <div class="div-form">
+                        <form id="form_postagem" method="post" onsubmit="return publicar()">
+                            <label>
+                                Título:
+                                <br>
+                                <input name="titulo" id="titulo" type="text" placeholder="Ex: Bolo de cenoura">
+                            </label>
+                            <br>
+                            <br>
+                            <label>
+                                Compartilhe seu amor por essa receita:
+                                <br>
+                                <input name="pqGosta" id="pqGosta" type="text" placeholder="Ex: Minha mãe adorava">
+                            </label>
+                            <br>
+                            <br>
+                            <label>
+                                Como fazer:
+                                <br>
+                                <input name="comoFazer" id="comoFazer" type="text"
+                                    placeholder="Ex: Ingredientes e modo de preparo">
+                            </label>
+                            <br>
+                            <br>
+                            <button onsubmit="publicar()">Postar</button>
+                        </form>
+                    </div>
+                    <h1>Postagens</h1>
+                    <div class="div-results">
+                        <div id="feed_container" class="feed-container">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+</body>
+
+</html>
+
+<script>
+
+    b_usuario.innerHTML = sessionStorage.NOME_USUARIO;
+    var idUsuario = Number(sessionStorage.ID_USUARIO);
+
+    function limparFormulario() {
+        document.getElementById("form_postagem").reset();
+    }
+
+    function publicar() {
+
+        var titulo = form_postagem.titulo.value.trim();
+        var comoFazer = form_postagem.comoFazer.value.trim();
+        var pqGosta = form_postagem.pqGosta.value.trim();
+
+        if (titulo === "" || comoFazer === "" || pqGosta === "") {
+            alert("Por favor, preencha todos os campos antes de postar sua receita.");
+            return false;
+        }
+
+        var corpo = {
+            titulo: titulo,
+            comoFazer: comoFazer,
+            pqGosta: pqGosta,
+            fkUsuario: idUsuario
+        };
+
+        fetch(`/receita/publicar/${idUsuario}`, {
+            method: "post",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(corpo)
+        }).then(function (resposta) {
+
+            console.log("resposta: ", resposta);
+
+            if (resposta.ok) {
+                window.alert("Post realizado com sucesso!");
+                window.location = "/feed.html";
+                limparFormulario();
+            } else if (resposta.status == 404) {
+                window.alert("Deu 404!");
+            } else {
+                throw ("Houve um erro ao tentar realizar a postagem! Código da resposta: " + resposta.status);
+            }
+        }).catch(function (resposta) {
+            console.log(`#ERRO: ${resposta}`);
+        });
+
+        return false;
+
+    }
+
+    function editar(idReceita) {
+        sessionStorage.ID_POSTAGEM_EDITANDO = idReceita;
+        console.log("cliquei em editar - " + idReceita);
+        window.location = "edicao-receita.html"
+
+    }
+
+    function deletar(idReceita) {
+        console.log("Criar função de apagar post escolhido - ID" + idReceita);
+        fetch(`/receita/deletar/${idReceita}`, {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        }).then(function (resposta) {
+
+            if (resposta.ok) {
+                window.alert("Post deletado com sucesso!");
+                window.location = "feed.html"
+            } else if (resposta.status == 404) {
+                window.alert("Deu 404!");
+            } else {
+                throw ("Houve um erro ao tentar realizar a postagem! Código da resposta: " + resposta.status);
+            }
+        }).catch(function (resposta) {
+            console.log(`#ERRO: ${resposta}`);
+        });
+    }
+
+    function atualizarFeed() {
+        fetch("/receita/listar").then(function (resposta) {
+            if (resposta.ok) {
+                if (resposta.status == 204) {
+                    var feed = document.getElementById("feed_container");
+                    var mensagem = document.createElement("span");
+                    mensagem.innerHTML = "Nenhum resultado encontrado.";
+                    feed.appendChild(mensagem);
+                    throw "Nenhum resultado encontrado!!";
+                }
+
+                resposta.json().then(function (resposta) {
+                    console.log("Dados recebidos: ", JSON.stringify(resposta));
+
+                    var feed = document.getElementById("feed_container");
+                    feed.innerHTML = "";
+
+                    // Usei para inverter a ordem de postagens
+                    resposta.reverse();
+
+                    for (let i = 0; i < resposta.length; i++) {
+                        let publicacao = resposta[i];
+
+                        var divPublicacao = document.createElement("div");
+                        var spanID = document.createElement("span");
+                        var spanTitulo = document.createElement("span");
+                        var spanNome = document.createElement("span");
+                        var divMotivo = document.createElement("div");
+                        var divDescricao = document.createElement("div");
+                        var divButtons = document.createElement("div");
+
+                        spanTitulo.innerHTML = "Título: <b>" + publicacao.titulo + "</b>";
+                        spanNome.innerHTML = "Autor: <b>" + publicacao.nome + "</b>";
+                        divMotivo.innerHTML = "Por que gosta: <b>" + publicacao.pqGosta + "</b>";
+                        divDescricao.innerHTML = "Como fazer: <b>" + publicacao.comoFazer + "</b>";
+
+                        divPublicacao.className = "publicacao";
+                        spanTitulo.id = "inputNumero" + publicacao.idReceita;
+                        spanNome.className = "publicacao-nome";
+                        spanTitulo.className = "publicacao-titulo";
+                        divMotivo.className = "publicacao-motivo";
+                        divDescricao.className = "publicacao-descricao";
+                        divButtons.className = "div-buttons";
+
+                        if (idUsuario === publicacao.fkUsuario) {
+                            let btnEditar = document.createElement("button");
+                            let btnDeletar = document.createElement("button");
+
+                            btnEditar.className = "publicacao-btn";
+                            btnEditar.textContent = "Editar";
+                            btnEditar.onclick = function () {
+                                editar(publicacao.idReceita);
+                            };
+
+                            btnDeletar.className = "publicacao-btn deletar";
+                            btnDeletar.textContent = "Deletar";
+                            btnDeletar.onclick = function () {
+                                deletar(publicacao.idReceita);
+                            };
+
+                            divButtons.appendChild(btnEditar);
+                            divButtons.appendChild(btnDeletar);
+                        }
+
+                        divPublicacao.appendChild(spanID);
+                        divPublicacao.appendChild(spanNome);
+                        divPublicacao.appendChild(spanTitulo);
+                        divPublicacao.appendChild(divMotivo);
+                        divPublicacao.appendChild(divDescricao);
+                        divPublicacao.appendChild(divButtons);
+
+                        feed.appendChild(divPublicacao);
+                    }
+                });
+            } else {
+                throw ("Houve um erro na API!");
+            }
+        }).catch(function (resposta) {
+            console.error(resposta);
+        });
+    }
+
+
+</script>

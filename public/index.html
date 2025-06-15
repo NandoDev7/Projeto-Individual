@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>M'C | Home</title>
+  <link rel="stylesheet" href="css/index.css">
+  <link rel="icon" href="./assets/icon/favicon2.svg">
+
+</head>
+
+<body>
+  <header>
+    <a class="logo">Maia's Cuisine <img src="./assets/icon/favicon2.svg"></a>
+
+    <div class="navigation">
+      <ul class="menu">
+        <div class="close-btn"></div>
+        <li class="menu-item"><a href="./index.html">Home</a></li>
+        <li class="barra">|</li>
+        <li class="menu-item"><a href="./sobre.html">Sobre mim</a></li>
+        <li class="barra">|</li>
+        <li class="menu-item">
+          <a class="sub-btn" href="index.html?scroll=footer" id="scrollContato">Contato</a>
+        </li>
+        <li class="barra">|</li>
+        <li class="menu-item">
+          <a class="sub-btn" href="./login.html">Login </a>
+        </li>
+      </ul>
+    </div>
+  </header>
+
+  <section class="section-home">
+    <img src="./assets/imgs/logo.png">
+  </section>
+
+  <section class="section-two">
+    <div>
+      <h2>Sobre o Maia's Cuisine</h2>
+      <div class="cardinho">
+        <div class="card">
+          <h2>🍽️O que é o Maia's Cuisine?</h2>
+          <p>Maias' Cuisine é uma rede social para quem ama comer, lembrar e aprender. Aqui, tanto quem já cozinha quanto quem está começando pode descobrir receitas, histórias e inspirações.
+          </p>
+        </div>
+        <div class="card">
+          <h2>🎯Qual o objetivo?</h2>
+          <p>Queremos despertar o prazer de cozinhar, aproximar pessoas por meio da comida e mostrar que todo mundo pode se aventurar na cozinha — com afeto, simplicidade e vontade de experimentar.
+          </p>
+        </div>
+        <div class="card">
+          <h2>⚙️Como funciona?</h2>
+          <p>Você cria sua conta, vê receitas de outras pessoas e pode até postar a sua (mesmo que seja seu primeiro prato). É um espaço feito para aprender e compartilhar, sem pressão.
+          </p>
+        </div>
+      </div>
+      <p class="clique">Quer conhecer algumas receitas? <a href="./login.html">Clique aqui!</a></p>
+    </div>
+  </section>
+
+
+  <div class="plataforma">
+    <div class="content"></div>
+    <div id="footer" class="footer">
+      <h2>Entre em contato em uma dessas plataformas!</h2>
+      <footer class="container">
+        <a class="git" href="https://github.com/Nandoz7" target="_blank" rel="noopener noreferrer">
+          <img src="./assets/imgs/github.svg">
+          <p class="gitlink">GitHub</p>
+        </a>
+        <a class="git" href="https://www.linkedin.com/in/luis-fernando-maia-augusto-238995333/" target="_blank"
+          rel="noopener noreferrer">
+          <img src="./assets/imgs/linkedinn.svg">
+          <p class="gitlink">LinkedIn</p>
+        </a>
+      </footer>
+    </div>
+  </div>
+
+</body>
+
+</html>
+
+
+<script>
+  document.getElementById("scrollContato").addEventListener("click", function (e) {
+    e.preventDefault();
+    document.getElementById("footer").scrollIntoView({ behavior: "smooth" });
+  });
+
+  window.addEventListener("DOMContentLoaded", function () {
+    const params = new URLSearchParams(window.location.search);
+    const target = params.get("scroll");
+
+    if (target === "footer") {
+      const footer = document.getElementById("footer");
+      if (footer) {
+        setTimeout(() => {
+          footer.scrollIntoView({ behavior: "smooth" });
+        }, 100);
+      }
+    }
+  });
+</script>
